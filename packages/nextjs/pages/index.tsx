@@ -50,7 +50,7 @@ function WalletInfo() {
         <WalletBalance address={address as `0x${string}`}></WalletBalance>
         <TokenInfo address={address as `0x${string}`}></TokenInfo>
         <ApiData address={address as `0x${string}`}></ApiData>
-        <DelegateBox address={address as `0x${string}`}></DelegateBox>
+        <DelegateBox></DelegateBox>
         <BallotApiData address={address as `0x${string}`}></BallotApiData>
 
         <CastVotes2></CastVotes2>
@@ -190,16 +190,16 @@ function ApiData(params: { address: `0x${string}` }) {
       <div className="card-body">
         <h2 className="card-title">Token information from API:</h2>
         <TokenAddressFromApi></TokenAddressFromApi>
-        <TotalSupplyFromApi></TotalSupplyFromApi>
+        {/* <TotalSupplyFromApi></TotalSupplyFromApi> */}
         <TokenNameFromApi></TokenNameFromApi>
-        <RequestTokens address={params.address}></RequestTokens>
+        <RequestNFT address={params.address}></RequestNFT>
       </div>
     </div>
   );
 }
 
-function DelegateBox(params: { address: `0x${string}` }) {
-  return <DelegateVote2 address={params.address}></DelegateVote2>;
+function DelegateBox() {
+  return <DelegateVote2></DelegateVote2>;
 }
 
 function TokenAddressFromApi() {
@@ -225,20 +225,20 @@ function TokenAddressFromApi() {
   );
 }
 
-function RequestTokens(params: { address: string }) {
-  const [data, setData] = useState<{ result: boolean }>();
+function RequestNFT(params: { address: string }) {
+  const [data, setData] = useState<{ result: boolean; transactionHash: string; error?: string }>();
   const [isLoading, setLoading] = useState(false);
 
   const body = { address: params.address, signature: "123" };
 
-  if (isLoading) return <p>Requesting tokens from API...</p>;
+  if (isLoading) return <p>Requesting NFT from API...</p>;
   if (!data)
     return (
       <button
         className="btn btn-active btn-neutral"
         onClick={() => {
           setLoading(true);
-          fetch("http://localhost:3001/mint-tokens", {
+          fetch("http://localhost:3001/mint-nfts", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(body),
@@ -250,35 +250,41 @@ function RequestTokens(params: { address: string }) {
             });
         }}
       >
-        Request tokens
+        Mint NFT
       </button>
     );
 
   return (
     <div>
-      <p>Result from API: {data.result ? data.result : "failed"}</p>
+      {data && (
+        <>
+          <p>Result from API: {data.result ? "worked" : "failed"}</p>
+          {data.transactionHash && <p>Transaction Hash: {data.transactionHash}</p>}
+          {data.error && <p>Error: {data.error}</p>}
+        </>
+      )}
     </div>
   );
 }
 
-function TotalSupplyFromApi() {
-  const [data, setData] = useState<{ result: string }>();
-  const [isLoading, setLoading] = useState(true);
+// function TotalSupplyFromApi() {
+//   const [data, setData] = useState<{ result: string }>();
+//   const [isLoading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetch("http://localhost:3001/total-supply")
-      .then(res => res.json())
-      .then(data => {
-        setData(data);
-        setLoading(false);
-      });
-  }, []);
+//   useEffect(() => {
+//     fetch("http://localhost:3001/total-supply")
+//       .then(res => res.json())
+//       .then(data => {
+//         setData(data);
+//         setLoading(false);
+//       });
+//   }, []);
 
-  if (isLoading) return <p>Loading total supply from API...</p>;
-  if (!data) return <p>No total supply information</p>;
+//   if (isLoading) return <p>Loading total supply from API...</p>;
+//   if (!data) return <p>No total supply information</p>;
 
-  return <div>Total supply from API: {data.result}</div>;
-}
+//   return <div>Total NFT supply from API: {data.result}</div>;
+// }
 
 function TokenNameFromApi() {
   const [data, setData] = useState<{ result: string }>();
@@ -296,7 +302,7 @@ function TokenNameFromApi() {
   if (isLoading) return <p>Loading token name from API...</p>;
   if (!data) return <p>No total token name information</p>;
 
-  return <div>Token name from API: {data.result}</div>;
+  return <div>NFT Token name from API: {data.result}</div>;
 }
 
 function BallotApiData(params: { address: `0x${string}` }) {
@@ -501,7 +507,7 @@ function RandomWord() {
   );
 }
 
-function DelegateVote2(params: { address: `0x${string}` }) {
+function DelegateVote2() {
   const [address, setAddress] = useState<string>("");
   const { data, isLoading, isSuccess, write } = useContractWrite({
     address: TOKEN_ADDRESS,
@@ -539,11 +545,7 @@ function DelegateVote2(params: { address: `0x${string}` }) {
             />
           </label>
         </div>
-        <button
-          className="btn btn-active btn-neutral"
-          disabled={isLoading}
-          onClick={() => write({ args: [params.address] })}
-        >
+        <button className="btn btn-active btn-neutral" disabled={isLoading} onClick={() => write({ args: [address] })}>
           Delegate Vote
         </button>
         {isLoading && <div>Check Wallet</div>}
@@ -609,7 +611,7 @@ function CastVotes2() {
         <button
           className="btn btn-active btn-neutral"
           disabled={isLoading}
-          onClick={() => write({ args: [proposal, amount * 1e18] })}
+          onClick={() => write({ args: [proposal, amount] })}
         >
           castVote
         </button>
