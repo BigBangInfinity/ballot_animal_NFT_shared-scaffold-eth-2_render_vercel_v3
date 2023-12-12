@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import base64 from "base-64";
 import type { NextPage } from "next";
 import { useAccount, useBalance, useContractWrite, useNetwork, useSignMessage } from "wagmi";
 
@@ -32,8 +33,77 @@ function PageBody() {
     <>
       <p className="text-center text-lg">Here we are!</p>
       <WalletInfo></WalletInfo>
-      <RandomWord></RandomWord>
     </>
+  );
+}
+
+function NFTCollection(params: { address: `0x${string}` }) {
+  const [nfts, setNfts] = useState<any[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    const fetchNfts = async () => {
+      try {
+        const response = await fetch(
+          `https://testnets-api.opensea.io/api/v2/chain/sepolia/account/${params.address}/nfts?collection=mynft-7607`,
+        );
+        const data = await response.json();
+        const decodedNfts = data.nfts.map((nft: { metadata_url: string }) => ({
+          ...nft,
+          metadata: JSON.parse(base64.decode(nft.metadata_url.split(",")[1])),
+        }));
+        setNfts(decodedNfts);
+      } catch (error) {
+        console.error("Error fetching NFTs:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchNfts();
+  }, []);
+
+  return (
+    <div className="grid grid-cols-5 gap-4 p-4">
+      {loading ? (
+        <p>Loading NFTs...</p>
+      ) : (
+        nfts.map((nft, index) => (
+          <div key={index} className="border p-2">
+            <img src={nft.image_url} alt={nft.name} style={{ width: "100%", height: "auto" }} />
+            {nft.metadata.attributes.map(
+              (
+                attr: {
+                  trait_type:
+                    | string
+                    | number
+                    | boolean
+                    | React.ReactElement<any, string | React.JSXElementConstructor<any>>
+                    | React.ReactFragment
+                    | React.ReactPortal
+                    | null
+                    | undefined;
+                  value:
+                    | string
+                    | number
+                    | boolean
+                    | React.ReactElement<any, string | React.JSXElementConstructor<any>>
+                    | React.ReactFragment
+                    | React.ReactPortal
+                    | null
+                    | undefined;
+                },
+                attrIndex: React.Key | null | undefined,
+              ) => (
+                <p key={attrIndex}>
+                  {attr.trait_type}: {attr.value}
+                </p>
+              ),
+            )}
+          </div>
+        ))
+      )}
+    </div>
   );
 }
 
@@ -42,9 +112,13 @@ function WalletInfo() {
   const { chain } = useNetwork();
   if (address)
     return (
-      <div>
+      <div className="flex flex-col items-center justify-center w-full">
         <p>Your account address is {address}</p>
         <p>Connected to the network {chain?.name}</p>
+        <div className="flex flex-col items-center justify-center my-8">
+          <h2 className="text-2xl font-bold mb-4">NFT Collection</h2>
+          <NFTCollection address={address as `0x${string}`}></NFTCollection>
+        </div>
         <WalletAction></WalletAction>
         <WalletAction2></WalletAction2>
         <WalletBalance address={address as `0x${string}`}></WalletBalance>
@@ -478,34 +552,34 @@ function WinningProposalFromApi() {
   return <div>Winner name from API: {data.result}</div>;
 }
 
-function RandomWord() {
-  const [data, setData] = useState<any>(null);
-  const [isLoading, setLoading] = useState(true);
+// function RandomWord() {
+//   const [data, setData] = useState<any>(null);
+//   const [isLoading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetch("https://randomuser.me/api/")
-      .then(res => res.json())
-      .then(data => {
-        setData(data.results[0]);
-        setLoading(false);
-      });
-  }, []);
+//   useEffect(() => {
+//     fetch("https://randomuser.me/api/")
+//       .then(res => res.json())
+//       .then(data => {
+//         setData(data.results[0]);
+//         setLoading(false);
+//       });
+//   }, []);
 
-  if (isLoading) return <p>Loading...</p>;
-  if (!data) return <p>No profile data</p>;
+//   if (isLoading) return <p>Loading...</p>;
+//   if (!data) return <p>No profile data</p>;
 
-  return (
-    <div className="card w-96 bg-primary text-primary-content mt-4">
-      <div className="card-body">
-        <h2 className="card-title">Testing useState and useEffect from React library</h2>
-        <h1>
-          Name: {data.name.title} {data.name.first} {data.name.last}
-        </h1>
-        <p>Email: {data.email}</p>
-      </div>
-    </div>
-  );
-}
+//   return (
+//     <div className="card w-96 bg-primary text-primary-content mt-4">
+//       <div className="card-body">
+//         <h2 className="card-title">Testing useState and useEffect from React library</h2>
+//         <h1>
+//           Name: {data.name.title} {data.name.first} {data.name.last}
+//         </h1>
+//         <p>Email: {data.email}</p>
+//       </div>
+//     </div>
+//   );
+// }
 
 function DelegateVote2() {
   const [address, setAddress] = useState<string>("");
