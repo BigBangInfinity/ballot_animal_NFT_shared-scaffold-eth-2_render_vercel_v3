@@ -628,7 +628,6 @@ function DelegateVote2() {
     </div>
   );
 }
-
 function CastVotes2() {
   const [proposal, setProposal] = useState<number>(0);
   const [amount, setAmount] = useState<number>(0);
@@ -656,22 +655,30 @@ function CastVotes2() {
     ],
     functionName: "vote",
   });
+
   return (
     <div className="card w-96 bg-primary text-primary-content mt-4">
       <div className="card-body">
         <h2 className="card-title">Cast Vote</h2>
         <div className="form-control w-full max-w-xs my-4">
-          <label>
-            Vote for proposal:
-            <input
-              type="number"
-              placeholder="0"
-              className="input input-bordered w-full max-w-xs"
-              value={proposal}
-              onChange={e => setProposal(Number(e.target.value))}
-            />
-          </label>
-          <label>
+          {/* Radio buttons for proposals */}
+          <div className="flex flex-col">
+            <label className="flex items-center space-x-2">
+              <input type="radio" name="proposal" checked={proposal === 0} onChange={() => setProposal(0)} />
+              <span>Bored Ape Yacht Club</span>
+            </label>
+            <label className="flex items-center space-x-2">
+              <input type="radio" name="proposal" checked={proposal === 1} onChange={() => setProposal(1)} />
+              <span>CryptoKitties</span>
+            </label>
+            <label className="flex items-center space-x-2">
+              <input type="radio" name="proposal" checked={proposal === 2} onChange={() => setProposal(2)} />
+              <span>Pudgy Penguins</span>
+            </label>
+          </div>
+
+          {/* Input field for amount */}
+          <label className="mt-4">
             Enter Amount:
             <input
               type="number"
@@ -682,6 +689,8 @@ function CastVotes2() {
             />
           </label>
         </div>
+
+        {/* Button to cast vote */}
         <button
           className="btn btn-active btn-neutral"
           disabled={isLoading}
