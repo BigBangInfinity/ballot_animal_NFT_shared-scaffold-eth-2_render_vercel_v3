@@ -232,7 +232,7 @@ function TokenBalanceFromApi(params: { address: `0x${string}` }) {
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`http://localhost:3001/token-balance/${params.address}`)
+    fetch(`https://animal-nft.onrender.com/token-balance/${params.address}`)
       .then(res => res.json())
       .then(data => {
         setData(data);
@@ -281,7 +281,7 @@ function TokenAddressFromApi() {
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("http://localhost:3001/contract-address")
+    fetch("https://animal-nft.onrender.com/contract-address")
       .then(res => res.json())
       .then(data => {
         setData(data);
@@ -312,7 +312,7 @@ function RequestNFT(params: { address: string }) {
         className="btn btn-active btn-neutral"
         onClick={() => {
           setLoading(true);
-          fetch("http://localhost:3001/mint-nfts", {
+          fetch("https://animal-nft.onrender.com/mint-nfts", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(body),
@@ -365,7 +365,7 @@ function TokenNameFromApi() {
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("http://localhost:3001/token-name")
+    fetch("https://animal-nft.onrender.com/token-name")
       .then(res => res.json())
       .then(data => {
         setData(data);
@@ -400,7 +400,7 @@ function BallotAddressFromApi() {
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("http://localhost:3001/ballot-address")
+    fetch("https://animal-nft.onrender.com/ballot-address")
       .then(res => res.json())
       .then(data => {
         setData(data);
@@ -423,7 +423,7 @@ function VotingPowerFromApi(params: { address: `0x${string}` }) {
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`http://localhost:3001/voting-power/${params.address}`)
+    fetch(`https://animal-nft.onrender.com/voting-power/${params.address}`)
       .then(res => res.json())
       .then(data => {
         setData(data);
@@ -451,7 +451,7 @@ function Proposal0FromApi() {
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("http://localhost:3001/proposal0")
+    fetch("https://animal-nft.onrender.com/proposal0")
       .then(res => res.json())
       .then(data => {
         setData(data);
@@ -483,7 +483,7 @@ function Proposal1FromApi() {
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("http://localhost:3001/proposal1")
+    fetch("https://animal-nft.onrender.com/proposal1")
       .then(res => res.json())
       .then(data => {
         setData(data);
@@ -515,7 +515,7 @@ function Proposal2FromApi() {
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("http://localhost:3001/proposal2")
+    fetch("https://animal-nft.onrender.com/proposal2")
       .then(res => res.json())
       .then(data => {
         setData(data);
@@ -538,7 +538,7 @@ function WinningProposalFromApi() {
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("http://localhost:3001/winner-name")
+    fetch("https://animal-nft.onrender.com/winner-name")
       .then(res => res.json())
       .then(data => {
         setData(data);
