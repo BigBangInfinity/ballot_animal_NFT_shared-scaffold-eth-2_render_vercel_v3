@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import base64 from "base-64";
 import type { NextPage } from "next";
 import { useAccount, useBalance, useContractWrite, useNetwork, useSignMessage } from "wagmi";
+import BallotResults from "~~/components/BallotResults";
+import MintNFT from "~~/components/MintNFT";
+import SubmitProposal from "~~/components/SubmitProposal";
 
 const TOKEN_ADDRESS = process.env.NEXT_PUBLIC_TOKEN_ADDRESS;
 const BALLOT_ADDRESS = process.env.NEXT_PUBLIC_BALLOT_ADDRESS;
@@ -11,7 +14,7 @@ const Home: NextPage = () => {
     <>
       <div className="flex items-center flex-col flex-grow pt-10">
         <div className="px-5">
-          <h1 className="text-center mb-8">
+          {/* <h1 className="text-center mb-8">
             <span className="block text-2xl mb-2">Welcome to</span>
             <span className="block text-4xl font-bold">Scaffold-ETH 2</span>
           </h1>
@@ -20,7 +23,7 @@ const Home: NextPage = () => {
             <code className="italic bg-base-300 text-base font-bold max-w-full break-words break-all inline-block">
               packages/nextjs/pages/index.tsx
             </code>
-          </p>
+          </p> */}
           <PageBody></PageBody>
         </div>
       </div>
@@ -31,7 +34,7 @@ const Home: NextPage = () => {
 function PageBody() {
   return (
     <>
-      <p className="text-center text-lg">Here we are!</p>
+      {/* <p className="text-center text-lg">Here we are!</p> */}
       <WalletInfo></WalletInfo>
     </>
   );
@@ -112,23 +115,30 @@ function WalletInfo() {
   const { chain } = useNetwork();
   if (address)
     return (
-      <div className="flex flex-col items-center justify-center w-full">
+      <>
         <p>Your account address is {address}</p>
         <p>Connected to the network {chain?.name}</p>
+        <div className="flex flex-row items-center justify-around w-full">
+          <MintNFT></MintNFT>
+          <SubmitProposal></SubmitProposal>
+          <BallotResults></BallotResults>
+        </div>
+        <div className="flex flex-row flex-wrap items-center justify-center w-full">
+          <WalletAction></WalletAction>
+          <WalletAction2></WalletAction2>
+          <WalletBalance address={address as `0x${string}`}></WalletBalance>
+          <TokenInfo address={address as `0x${string}`}></TokenInfo>
+          <ApiData address={address as `0x${string}`}></ApiData>
+          <DelegateBox></DelegateBox>
+          <BallotApiData address={address as `0x${string}`}></BallotApiData>
+
+          <CastVotes2></CastVotes2>
+        </div>
         <div className="flex flex-col items-center justify-center my-8">
           <h2 className="text-2xl font-bold mb-4">NFT Collection</h2>
           <NFTCollection address={address as `0x${string}`}></NFTCollection>
         </div>
-        <WalletAction></WalletAction>
-        <WalletAction2></WalletAction2>
-        <WalletBalance address={address as `0x${string}`}></WalletBalance>
-        <TokenInfo address={address as `0x${string}`}></TokenInfo>
-        <ApiData address={address as `0x${string}`}></ApiData>
-        <DelegateBox></DelegateBox>
-        <BallotApiData address={address as `0x${string}`}></BallotApiData>
-
-        <CastVotes2></CastVotes2>
-      </div>
+      </>
     );
   if (isConnecting)
     return (
