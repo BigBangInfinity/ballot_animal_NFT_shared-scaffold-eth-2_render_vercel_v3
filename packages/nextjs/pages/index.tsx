@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
+import BallotResults from "../components/BallotResults";
+import MintNFT from "../components/MintNFT";
+import SubmitProposal from "../components/SubmitProposal";
 import base64 from "base-64";
 import type { NextPage } from "next";
 import { useAccount, useBalance, useContractWrite, useNetwork, useSignMessage } from "wagmi";
-import BallotResults from "~~/components/BallotResults";
-import MintNFT from "~~/components/MintNFT";
-import SubmitProposal from "~~/components/SubmitProposal";
 
 const TOKEN_ADDRESS = process.env.NEXT_PUBLIC_TOKEN_ADDRESS;
 const BALLOT_ADDRESS = process.env.NEXT_PUBLIC_BALLOT_ADDRESS;
@@ -14,16 +14,17 @@ const Home: NextPage = () => {
     <>
       <div className="flex items-center flex-col flex-grow pt-10">
         <div className="px-5">
-          {/* <h1 className="text-center mb-8">
+          <h1 className="text-center mb-8">
             <span className="block text-2xl mb-2">Welcome to</span>
-            <span className="block text-4xl font-bold">Scaffold-ETH 2</span>
+            <span className="block text-4xl font-bold">ZOO DAO</span>
+
+            <p className="text-centei r text-lg">
+              {/* Team 12 final project{" "} */}
+              <code className="italic bg-base-300 text-base font-bold max-w-full break-words break-all inline-block">
+                Rescue Lost Animals by minting an NFT (no signature, no gas needed)
+              </code>
+            </p>
           </h1>
-          <p className="text-center text-lg">
-            Get started by editing{" "}
-            <code className="italic bg-base-300 text-base font-bold max-w-full break-words break-all inline-block">
-              packages/nextjs/pages/index.tsx
-            </code>
-          </p> */}
           <PageBody></PageBody>
         </div>
       </div>
@@ -34,7 +35,7 @@ const Home: NextPage = () => {
 function PageBody() {
   return (
     <>
-      {/* <p className="text-center text-lg">Here we are!</p> */}
+      <p className="text-center text-lg">Connect your wallet!</p>
       <WalletInfo></WalletInfo>
     </>
   );
@@ -67,45 +68,47 @@ function NFTCollection(params: { address: `0x${string}` }) {
   }, []);
 
   return (
-    <div className="grid grid-cols-5 gap-4 p-4">
-      {loading ? (
-        <p>Loading NFTs...</p>
-      ) : (
-        nfts.map((nft, index) => (
-          <div key={index} className="border p-2">
-            <img src={nft.image_url} alt={nft.name} style={{ width: "100%", height: "auto" }} />
-            {nft.metadata.attributes.map(
-              (
-                attr: {
-                  trait_type:
-                    | string
-                    | number
-                    | boolean
-                    | React.ReactElement<any, string | React.JSXElementConstructor<any>>
-                    | React.ReactFragment
-                    | React.ReactPortal
-                    | null
-                    | undefined;
-                  value:
-                    | string
-                    | number
-                    | boolean
-                    | React.ReactElement<any, string | React.JSXElementConstructor<any>>
-                    | React.ReactFragment
-                    | React.ReactPortal
-                    | null
-                    | undefined;
-                },
-                attrIndex: React.Key | null | undefined,
-              ) => (
-                <p key={attrIndex}>
-                  {attr.trait_type}: {attr.value}
-                </p>
-              ),
-            )}
-          </div>
-        ))
-      )}
+    <div className="w-full flex justify-center ">
+      <div className="grid grid-cols-1 gap-4 p-4 mx-auto">
+        {loading ? (
+          <p>Loading Animals...</p>
+        ) : (
+          nfts.map((nft, index) => (
+            <div key={index} className="border p-2">
+              <img src={nft.image_url} alt={nft.name} style={{ width: "100%", height: "auto" }} />
+              {nft.metadata.attributes.map(
+                (
+                  attr: {
+                    trait_type:
+                      | string
+                      | number
+                      | boolean
+                      | React.ReactElement<any, string | React.JSXElementConstructor<any>>
+                      | React.ReactFragment
+                      | React.ReactPortal
+                      | null
+                      | undefined;
+                    value:
+                      | string
+                      | number
+                      | boolean
+                      | React.ReactElement<any, string | React.JSXElementConstructor<any>>
+                      | React.ReactFragment
+                      | React.ReactPortal
+                      | null
+                      | undefined;
+                  },
+                  attrIndex: React.Key | null | undefined,
+                ) => (
+                  <p key={attrIndex}>
+                    {attr.trait_type}: {attr.value}
+                  </p>
+                ),
+              )}
+            </div>
+          ))
+        )}
+      </div>
     </div>
   );
 }
@@ -116,16 +119,16 @@ function WalletInfo() {
   if (address)
     return (
       <>
-        <p>Your account address is {address}</p>
-        <p>Connected to the network {chain?.name}</p>
+        <p>Your Animal Ledger is {address}</p>
+        <p>Connected to the Zoo chain {chain?.name}</p>
         <div className="flex flex-row items-center justify-around w-full">
           <MintNFT></MintNFT>
           <SubmitProposal></SubmitProposal>
           <BallotResults></BallotResults>
         </div>
-        <div className="flex flex-row flex-wrap items-center justify-center w-full">
+        <div className="flex flex-row flex-wrap items-center justify-around w-full">
           <WalletAction></WalletAction>
-          <WalletAction2></WalletAction2>
+          {/* <WalletAction2></WalletAction2> */}
           <WalletBalance address={address as `0x${string}`}></WalletBalance>
           <TokenInfo address={address as `0x${string}`}></TokenInfo>
           <ApiData address={address as `0x${string}`}></ApiData>
@@ -135,7 +138,7 @@ function WalletInfo() {
           <CastVotes2></CastVotes2>
         </div>
         <div className="flex flex-col items-center justify-center my-8">
-          <h2 className="text-2xl font-bold mb-4">NFT Collection</h2>
+          <h2 className="text-2xl font-bold mb-4">Your Rescued Animals</h2>
           <NFTCollection address={address as `0x${string}`}></NFTCollection>
         </div>
       </>
@@ -165,10 +168,10 @@ function WalletAction() {
   return (
     <div className="card w-96 bg-primary text-primary-content mt-4">
       <div className="card-body">
-        <h2 className="card-title">Testing signatures</h2>
+        <h2 className="card-title">What&apos;s your favorite Animal?</h2>
         <div className="form-control w-full max-w-xs my-4">
           <label className="label">
-            <span className="label-text">Enter the message to be signed:</span>
+            <span className="label-text">Just curious...</span>
           </label>
           <input
             type="text"
@@ -196,29 +199,29 @@ function WalletAction() {
   );
 }
 
-function WalletAction2() {
-  const { data, isError, isLoading, isSuccess, signMessage } = useSignMessage();
-  return (
-    <div className="card w-96 bg-primary text-primary-content mt-4">
-      <div className="card-body">
-        <h2 className="card-title">Testing signatures</h2>
-        <button
-          className="btn btn-active btn-neutral"
-          disabled={isLoading}
-          onClick={() =>
-            signMessage({
-              message: "I want a token",
-            })
-          }
-        >
-          Sign message
-        </button>
-        {isSuccess && <div>Signature: {data}</div>}
-        {isError && <div>Error signing message</div>}
-      </div>
-    </div>
-  );
-}
+// function WalletAction2() {
+//   const { data, isError, isLoading, isSuccess, signMessage } = useSignMessage();
+//   return (
+//     <div className="card w-96 bg-primary text-primary-content mt-4">
+//       <div className="card-body">
+//         <h2 className="card-title">Testing signatures</h2>
+//         <button
+//           className="btn btn-active btn-neutral"
+//           disabled={isLoading}
+//           onClick={() =>
+//             signMessage({
+//               message: "I want a token",
+//             })
+//           }
+//         >
+//           Sign message
+//         </button>
+//         {isSuccess && <div>Signature: {data}</div>}
+//         {isError && <div>Error signing message</div>}
+//       </div>
+//     </div>
+//   );
+// }
 
 function WalletBalance(params: { address: `0x${string}` }) {
   const { data, isError, isLoading } = useBalance({
@@ -230,8 +233,8 @@ function WalletBalance(params: { address: `0x${string}` }) {
   return (
     <div className="card w-96 bg-primary text-primary-content mt-4">
       <div className="card-body">
-        <h2 className="card-title">Testing useBalance wagmi hook</h2>
-        Balance: {data?.formatted} {data?.symbol}
+        <h2 className="card-title">Available SEP to donate to the Zoo</h2>
+        Available {data?.formatted} {data?.symbol}
       </div>
     </div>
   );
@@ -242,7 +245,7 @@ function TokenBalanceFromApi(params: { address: `0x${string}` }) {
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`https://animal-nft.onrender.com/token-balance/${params.address}`)
+    fetch(`https://ballot2-animal-nft.onrender.com/token-balance/${params.address}`)
       .then(res => res.json())
       .then(data => {
         setData(data);
@@ -253,14 +256,14 @@ function TokenBalanceFromApi(params: { address: `0x${string}` }) {
   if (isLoading) return <p>Loading voting power from API...</p>;
   if (!data) return <p>No voting power information</p>;
 
-  return <div>Balance: {data.result}</div>;
+  return <div>Animal captured: {data.result}</div>;
 }
 
 function TokenInfo(params: { address: `0x${string}` }) {
   return (
     <div className="card w-96 bg-primary text-primary-content mt-4">
       <div className="card-body">
-        <h2 className="card-title">Wallet token balance from API:</h2>
+        <h2 className="card-title">Animal Rescued So Far:</h2>
         <TokenNameFromApi></TokenNameFromApi>
         <TokenBalanceFromApi address={params.address}></TokenBalanceFromApi>
       </div>
@@ -272,11 +275,11 @@ function ApiData(params: { address: `0x${string}` }) {
   return (
     <div className="card w-96 bg-primary text-primary-content mt-4">
       <div className="card-body">
-        <h2 className="card-title">Token information from API:</h2>
+        <h2 className="card-title">Rescue Another Animal:</h2>
+        <RequestNFT address={params.address}></RequestNFT>
         <TokenAddressFromApi></TokenAddressFromApi>
         {/* <TotalSupplyFromApi></TotalSupplyFromApi> */}
         <TokenNameFromApi></TokenNameFromApi>
-        <RequestNFT address={params.address}></RequestNFT>
       </div>
     </div>
   );
@@ -291,7 +294,7 @@ function TokenAddressFromApi() {
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("https://animal-nft.onrender.com/contract-address")
+    fetch("https://ballot2-animal-nft.onrender.com/contract-address")
       .then(res => res.json())
       .then(data => {
         setData(data);
@@ -304,7 +307,7 @@ function TokenAddressFromApi() {
 
   return (
     <div>
-      <p>Token address from API: {data.result}</p>
+      <p>Zoo Address : {data.result}</p>
     </div>
   );
 }
@@ -315,14 +318,14 @@ function RequestNFT(params: { address: string }) {
 
   const body = { address: params.address, signature: "123" };
 
-  if (isLoading) return <p>Requesting NFT from API...</p>;
+  if (isLoading) return <p>Locating a lost Animal...</p>;
   if (!data)
     return (
       <button
         className="btn btn-active btn-neutral"
         onClick={() => {
           setLoading(true);
-          fetch("https://animal-nft.onrender.com/mint-nfts", {
+          fetch("https://ballot2-animal-nft.onrender.com/mint-nfts", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(body),
@@ -342,7 +345,7 @@ function RequestNFT(params: { address: string }) {
     <div>
       {data && (
         <>
-          <p>Result from API: {data.result ? "worked" : "failed"}</p>
+          <p>Result from API: {data.result ? "captured" : "escaped"}</p>
           {data.transactionHash && <p>Transaction Hash: {data.transactionHash}</p>}
           {data.error && <p>Error: {data.error}</p>}
         </>
@@ -375,7 +378,7 @@ function TokenNameFromApi() {
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("https://animal-nft.onrender.com/token-name")
+    fetch("https://ballot2-animal-nft.onrender.com/token-name")
       .then(res => res.json())
       .then(data => {
         setData(data);
@@ -386,14 +389,14 @@ function TokenNameFromApi() {
   if (isLoading) return <p>Loading token name from API...</p>;
   if (!data) return <p>No total token name information</p>;
 
-  return <div>NFT Token name from API: {data.result}</div>;
+  return <div>Zoo Name: {data.result}</div>;
 }
 
 function BallotApiData(params: { address: `0x${string}` }) {
   return (
     <div className="card w-96 bg-primary text-primary-content mt-4">
       <div className="card-body">
-        <h2 className="card-title">Ballot information from API:</h2>
+        <h2 className="card-title">What should we do with the Rescued Animals?</h2>
         <VotingPowerFromApi address={params.address}></VotingPowerFromApi>
         <BallotAddressFromApi></BallotAddressFromApi>
         <Proposal0FromApi></Proposal0FromApi>
@@ -410,7 +413,7 @@ function BallotAddressFromApi() {
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("https://animal-nft.onrender.com/ballot-address")
+    fetch("https://ballot2-animal-nft.onrender.com/ballot-address")
       .then(res => res.json())
       .then(data => {
         setData(data);
@@ -418,12 +421,12 @@ function BallotAddressFromApi() {
       });
   }, []);
 
-  if (isLoading) return <p>Loading ballot address from API...</p>;
-  if (!data) return <p>No ballot address information</p>;
+  if (isLoading) return <p>Loading Zoo Proposal...</p>;
+  if (!data) return <p>No zoo proposal information</p>;
 
   return (
     <div>
-      <p>Ballot address from API: {data.result}</p>
+      <p>Their destiny is in your hands: {data.result}</p>
     </div>
   );
 }
@@ -433,7 +436,7 @@ function VotingPowerFromApi(params: { address: `0x${string}` }) {
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`https://animal-nft.onrender.com/voting-power/${params.address}`)
+    fetch(`https://ballot2-animal-nft.onrender.com/voting-power/${params.address}`)
       .then(res => res.json())
       .then(data => {
         setData(data);
@@ -441,10 +444,10 @@ function VotingPowerFromApi(params: { address: `0x${string}` }) {
       });
   }, []);
 
-  if (isLoading) return <p>Loading voting power from API...</p>;
-  if (!data) return <p>No voting power information</p>;
+  if (isLoading) return <p>Loading your voting power...</p>;
+  if (!data) return <p>No voting power</p>;
 
-  return <div>Voting power: {data.result}</div>;
+  return <div>Your voting power: {data.result}</div>;
 }
 
 interface Proposal0Data {
@@ -461,7 +464,7 @@ function Proposal0FromApi() {
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("https://animal-nft.onrender.com/proposal0")
+    fetch("https://ballot2-animal-nft.onrender.com/proposal0")
       .then(res => res.json())
       .then(data => {
         setData(data);
@@ -493,7 +496,7 @@ function Proposal1FromApi() {
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("https://animal-nft.onrender.com/proposal1")
+    fetch("https://ballot2-animal-nft.onrender.com/proposal1")
       .then(res => res.json())
       .then(data => {
         setData(data);
@@ -525,7 +528,7 @@ function Proposal2FromApi() {
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("https://animal-nft.onrender.com/proposal2")
+    fetch("https://ballot2-animal-nft.onrender.com/proposal2")
       .then(res => res.json())
       .then(data => {
         setData(data);
@@ -548,7 +551,7 @@ function WinningProposalFromApi() {
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("https://animal-nft.onrender.com/winner-name")
+    fetch("https://ballot2-animal-nft.onrender.com/winner-name")
       .then(res => res.json())
       .then(data => {
         setData(data);
@@ -559,37 +562,8 @@ function WinningProposalFromApi() {
   if (isLoading) return <p>Loading winner name from API...</p>;
   if (!data) return <p>No winner name information</p>;
 
-  return <div>Winner name from API: {data.result}</div>;
+  return <div>ZOO DAO DECISION: {data.result}</div>;
 }
-
-// function RandomWord() {
-//   const [data, setData] = useState<any>(null);
-//   const [isLoading, setLoading] = useState(true);
-
-//   useEffect(() => {
-//     fetch("https://randomuser.me/api/")
-//       .then(res => res.json())
-//       .then(data => {
-//         setData(data.results[0]);
-//         setLoading(false);
-//       });
-//   }, []);
-
-//   if (isLoading) return <p>Loading...</p>;
-//   if (!data) return <p>No profile data</p>;
-
-//   return (
-//     <div className="card w-96 bg-primary text-primary-content mt-4">
-//       <div className="card-body">
-//         <h2 className="card-title">Testing useState and useEffect from React library</h2>
-//         <h1>
-//           Name: {data.name.title} {data.name.first} {data.name.last}
-//         </h1>
-//         <p>Email: {data.email}</p>
-//       </div>
-//     </div>
-//   );
-// }
 
 function DelegateVote2() {
   const [address, setAddress] = useState<string>("");
@@ -616,10 +590,10 @@ function DelegateVote2() {
   return (
     <div className="card w-96 bg-primary text-primary-content mt-4">
       <div className="card-body">
-        <h2 className="card-title">Delegate Vote</h2>
+        <h2 className="card-title">Register To Vote</h2>
         <div className="form-control w-full max-w-xs my-4">
           <label>
-            Enter Address:
+            Enter Your Wallet Address:
             <input
               type="text"
               placeholder="Type here"
@@ -630,7 +604,7 @@ function DelegateVote2() {
           </label>
         </div>
         <button className="btn btn-active btn-neutral" disabled={isLoading} onClick={() => write({ args: [address] })}>
-          Delegate Vote
+          Enter Vote
         </button>
         {isLoading && <div>Check Wallet</div>}
         {isSuccess && <div>Transaction: {JSON.stringify(data)}</div>}
@@ -675,21 +649,21 @@ function CastVotes2() {
           <div className="flex flex-col">
             <label className="flex items-center space-x-2">
               <input type="radio" name="proposal" checked={proposal === 0} onChange={() => setProposal(0)} />
-              <span>Bored Ape Yacht Club</span>
+              <span>Lock all rescued Animals back to the zoo?</span>
             </label>
             <label className="flex items-center space-x-2">
               <input type="radio" name="proposal" checked={proposal === 1} onChange={() => setProposal(1)} />
-              <span>CryptoKitties</span>
+              <span>Release them into the wild?</span>
             </label>
             <label className="flex items-center space-x-2">
               <input type="radio" name="proposal" checked={proposal === 2} onChange={() => setProposal(2)} />
-              <span>Pudgy Penguins</span>
+              <span>Let&apos;s start the barbecue...</span>
             </label>
           </div>
 
           {/* Input field for amount */}
           <label className="mt-4">
-            Enter Amount:
+            How many Animals will you commit?
             <input
               type="number"
               placeholder="0"
@@ -708,7 +682,7 @@ function CastVotes2() {
         >
           castVote
         </button>
-        {isLoading && <div>Check Wallet</div>}
+        {isLoading && <div>Verification</div>}
         {isSuccess && <div>Transaction: {JSON.stringify(data)}</div>}
       </div>
     </div>
