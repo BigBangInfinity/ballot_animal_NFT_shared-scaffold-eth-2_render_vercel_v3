@@ -29,7 +29,7 @@ const Home: NextPage = () => {
 
         <div className="relative z-60 pt-32 md: pt-0 md: top-1/4 1g:top-1/3 ma mx-auto">
           <div className="max-w-2x1 px-4 flex flex-col gap-9 md: max-x1:bg-white/30 md: max-x1: rourded-2x1">
-            <div className="flex gap-8 font-semibold mt-4">
+            <div className="flex justify-center gap-8 font-semibold mt-4">
               <RescueAnAnimal text="" />
             </div>
           </div>
@@ -58,7 +58,7 @@ const Home: NextPage = () => {
 function PageBody() {
   return (
     <>
-      <p className="text-center text-lg">Connect your wallet!</p>
+      {/* <p className="text-center text-lg">Connect your wallet!</p> */}
       <WalletInfo></WalletInfo>
     </>
   );
@@ -142,14 +142,16 @@ function WalletInfo() {
   if (address)
     return (
       <>
-        <p>Your Animal Ledger is {address}</p>
-        <p>Connected to the Zoo chain {chain?.name}</p>
-        <div className="flex flex-row items-center justify-around w-full">
+        <div className="flex flex-col flex-wrap items-center justify-around w-full">
+          <p>Your Animal Ledger is {address}</p>
+          <p>Connected to the Zoo chain {chain?.name}</p>
+        </div>
+        {/* <div className="flex flex-row items-center justify-around w-full">
           <MintNFT></MintNFT>
           <SubmitProposal></SubmitProposal>
           <BallotResults></BallotResults>
-        </div>
-        <div className="flex flex-row flex-wrap items-center justify-around w-full">
+        </div> */}
+        <div className="flex flex-row flex-wrap justify-between items-start w-full">
           <WalletAction></WalletAction>
           {/* <WalletAction2></WalletAction2> */}
           <WalletBalance address={address as `0x${string}`}></WalletBalance>
@@ -157,7 +159,12 @@ function WalletInfo() {
           <ApiData address={address as `0x${string}`}></ApiData>
           <DelegateBox></DelegateBox>
           <BallotApiData address={address as `0x${string}`}></BallotApiData>
-
+          <div className="card w-96 bg-primary text-primary-content mt-4">
+            <div className="flex flex-col items-center justify-center my-8">
+              <h2 className="text-2xl font-bold mb-4">Your Rescued Animals</h2>
+              <NFTCollection address={address as `0x${string}`}></NFTCollection>
+            </div>
+          </div>
           <CastVotes2></CastVotes2>
         </div>
 
@@ -172,10 +179,10 @@ function WalletInfo() {
             style={{ objectFit: "cover", objectPosition: "center" }}
           />
         </section>
-        <div className="flex flex-col items-center justify-center my-8">
+        {/* <div className="flex flex-col items-center justify-center my-8">
           <h2 className="text-2xl font-bold mb-4">Your Rescued Animals</h2>
           <NFTCollection address={address as `0x${string}`}></NFTCollection>
-        </div>
+        </div> */}
       </>
     );
   if (isConnecting)
