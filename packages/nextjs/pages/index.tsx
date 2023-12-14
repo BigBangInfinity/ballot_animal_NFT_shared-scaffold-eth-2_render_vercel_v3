@@ -8,6 +8,7 @@ import banner from "../public/banner.png";
 import base64 from "base-64";
 import type { NextPage } from "next";
 import { useAccount, useBalance, useContractWrite, useNetwork, useSignMessage } from "wagmi";
+import RescueAnAnimal from "~~/components/RescueAnAnimal";
 
 const TOKEN_ADDRESS = process.env.NEXT_PUBLIC_TOKEN_ADDRESS;
 const BALLOT_ADDRESS = process.env.NEXT_PUBLIC_BALLOT_ADDRESS;
@@ -25,16 +26,11 @@ const Home: NextPage = () => {
           alt="nft banner image"
           style={{ objectFit: "cover", objectPosition: "center" }}
         />
+
         <div className="relative z-60 pt-32 md: pt-0 md: top-1/4 1g:top-1/3 ma mx-auto">
           <div className="max-w-2x1 px-4 flex flex-col gap-9 md: max-x1:bg-white/30 md: max-x1: rourded-2x1">
             <div className="flex gap-8 font-semibold mt-4">
-              <button
-                type="button"
-                style={{ objectFit: "cover", objectPosition: "center" }}
-                className="bg-black/30 hover:bg-black/60 text-white/80 hover:text-white/90 px-6 py-4 rounded-md"
-              >
-                Rescue an Animal
-              </button>
+              <RescueAnAnimal text="" />
             </div>
           </div>
         </div>
