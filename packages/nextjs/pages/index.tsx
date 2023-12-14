@@ -3,6 +3,7 @@ import Image from "next/image";
 import BallotResults from "../components/BallotResults";
 import MintNFT from "../components/MintNFT";
 import SubmitProposal from "../components/SubmitProposal";
+import banner2 from "../public/banner2.png";
 import banner from "../public/banner.png";
 import base64 from "base-64";
 import type { NextPage } from "next";
@@ -30,9 +31,9 @@ const Home: NextPage = () => {
               <button
                 type="button"
                 style={{ objectFit: "cover", objectPosition: "center" }}
-                className="bg-black/30 hover:bg-black/40 text-white/80 hover:text-white/90 px-4 py-2 rounded-md"
+                className="bg-black/30 hover:bg-black/60 text-white/80 hover:text-white/90 px-6 py-4 rounded-md"
               >
-                Mint NFT
+                Rescue an Animal
               </button>
             </div>
           </div>
@@ -163,6 +164,18 @@ function WalletInfo() {
 
           <CastVotes2></CastVotes2>
         </div>
+
+        <section className="relative w-full min-h-screen md:h-screen flex md:block flex-col justify-center">
+          <Image
+            priority
+            fill
+            quality={100}
+            className="pointer-events-none select-none"
+            src={banner2}
+            alt="nft banner image"
+            style={{ objectFit: "cover", objectPosition: "center" }}
+          />
+        </section>
         <div className="flex flex-col items-center justify-center my-8">
           <h2 className="text-2xl font-bold mb-4">Your Rescued Animals</h2>
           <NFTCollection address={address as `0x${string}`}></NFTCollection>
